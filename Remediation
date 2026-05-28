@@ -5,56 +5,39 @@
 ### 1. Enable SYN Cookies
 SYN Cookies allow the server to avoid allocating backlog resources until the full three-way handshake is complete. Instead of reserving a slot immediately on receiving a SYN, the server encodes connection state into the SYN-ACK response. Only when the final ACK arrives is a slot allocated — effectively neutralising the half-open connection exhaustion method.
 
-**Priority:** Critical — addresses the root mechanism of the attack directly.
-
+Priority: Critical — addresses the root mechanism of the attack directly.
 ---
 
 ### 2. Configure Rate Limiting
 Limit the number of SYN packets accepted per second from a single IP address. This slows the flood without blocking all traffic, and gives the server time to process legitimate connections.
 
-**Implementation:** Can be configured at the firewall level or via OS network stack settings (e.g., `iptables` on Linux).
+Implementation: Can be configured at the firewall level or via OS network stack settings (e.g., iptables on Linux).
 
-**Priority:** High — easy to implement and effective as a first line of defence.
-
+Priority: High — easy to implement and effective as a first line of defence.
 ---
 
 ### 3. Deploy a WAF or DDoS Protection Service
 A Web Application Firewall (WAF) or cloud-based DDoS protection service (e.g., Cloudflare, AWS Shield) can detect and absorb SYN flood traffic before it reaches the origin server.
 
-**Priority:** High — especially important for public-facing services.
-
+Priority: High — especially important for public-facing services.
 ---
 
 ### 4. Reduce SYN-RECEIVED Timeout
 Shortening the time the server waits for the final ACK means half-open connections are cleared faster, freeing backlog slots more quickly. This reduces the window of exploitation.
 
-**Implementation:** Adjust `tcp_synack_retries` and related kernel parameters on Linux systems.
+Implementation: Adjust tcp_synack_retries and related kernel parameters on Linux systems.
 
-**Priority:** Medium — a useful complement to SYN Cookies, not a standalone solution.
-
+Priority: Medium — a useful complement to SYN Cookies, not a standalone solution.
 ---
 
 ### 5. Implement IP Reputation Filtering
 Block or throttle known malicious IP ranges at the firewall level before packets reach the web server. Use threat intelligence feeds to maintain an up-to-date blocklist.
 
-**Priority:** Medium — effective for known attackers, less so for spoofed or rotating IPs.
-
+Priority: Medium — effective for known attackers, less so for spoofed or rotating IPs.
 ---
 
 ### 6. Add Redundancy and Load Balancing
 Distribute traffic across multiple servers so that a flood against one target does not bring the entire service offline. Load balancers can also be configured to detect and drop SYN flood patterns.
 
-**Priority:** Medium-term infrastructure improvement.
-
+Priority: Medium-term infrastructure improvement.
 ---
-
-## Summary Table
-
-| Control | Addresses | Priority |
-|---------|-----------|----------|
-| SYN Cookies | Half-open connection exhaustion | Critical |
-| Rate Limiting | Flood volume | High |
-| WAF / DDoS Protection | Upstream absorption | High |
-| Reduce SYN-RECEIVED Timeout | Backlog recovery speed | Medium |
-| IP Reputation Filtering | Known bad actors | Medium |
-| Load Balancing / Redundancy | Service resilience | Medium-term |
