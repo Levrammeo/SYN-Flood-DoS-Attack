@@ -3,7 +3,7 @@
 ## Attack Identification
 
 - IP 203.0.113.0 appears in hundreds of consecutive log entries — far beyond normal traffic volume
-- Every packet from this IP is a **SYN packet only** — the defining fingerprint of a SYN Flood
+- Every packet from this IP is a SYN packet only — the defining fingerprint of a SYN Flood
 - No SYN-ACK responses or final ACKs were ever sent by the attacker
 - Attack begins at log entry #52 and continues relentlessly
 
@@ -12,18 +12,18 @@
 - Server dutifully responds to each SYN with a SYN-ACK and reserves a backlog slot
 - Half-open connections accumulate as the attacker never completes handshakes
 - TCP backlog table saturates — no capacity for new legitimate connections
-- Server begins sending RST, ACK to legitimate clients (entries #73, #77, #80, #85, #92, #121)
-- 504 Gateway Timeout error first appears at entry **#77**
+- Server begins sending RST, ACK to legitimate clients (entries 73, 77, 80, 85, 92, 121)
+- 504 Gateway Timeout error first appears at entry 77
 
 ## Impact on Legitimate Users
 
-- Early log entries (#47–#51) show legitimate users (`198.51.100.23`, `198.51.100.14`) successfully completing handshakes
+- Early log entries (47–51) show legitimate users (198.51.100.23, 198.51.100.14) successfully completing handshakes
 - Once the backlog fills, real users are either ignored or forcibly disconnected
 - Web service becomes completely unavailable — full denial of service
 
 ## Protocol Details
 
-- **Attack target:** Port 443 (HTTPS) on server 192.0.2.1
-- **Protocol exploited:** TCP — specifically the connection establishment (SYN) phase
-- **Root vulnerability:** TCP backlog table has finite size; server must reserve resources before handshake completion
-- **Key flaw exploited:** Normal TCP behaviour — the server is doing exactly what it's designed to do
+- Attack target: Port 443 (HTTPS) on server 192.0.2.1
+- Protocol exploited: TCP — specifically the connection establishment (SYN) phase
+- Root vulnerability: TCP backlog table has finite size; server must reserve resources before handshake completion
+- Key flaw exploited: Normal TCP behaviour — the server is doing exactly what it's designed to do
