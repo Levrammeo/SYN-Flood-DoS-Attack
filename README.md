@@ -28,10 +28,10 @@ This project documents a hands-on analysis of a SYN Flood Denial-of-Service (DoS
 
 | Log Entries | What I Observed |
 |-------------|----------------|
-| #47–#51 | Legitimate users completing full handshakes — server functional |
-| #52 onward | 203.0.113.0 begins sending continuous SYN packets — never completes handshake |
-| #73, #77, #80, #85 | Server sends RST, ACK to real users — backlog saturated |
-| #77 | First 504 Gateway Timeout error — service degraded |
+| 47–51 | Legitimate users completing full handshakes — server functional |
+| 52 onward | 203.0.113.0 begins sending continuous SYN packets — never completes handshake |
+| 73, 77, 80, 85 | Server sends RST, ACK to real users — backlog saturated |
+| 77 | First 504 Gateway Timeout error — service degraded |
 
 ---
 
